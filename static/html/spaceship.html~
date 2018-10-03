@@ -1,0 +1,42 @@
+<!-- -*- encoding:utf-8-*--->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src= "/js/jquery.js"></script>
+  <script type="text/javascript" src= "/js/space.js"></script>
+  <link rel="stylesheet" href="/css/space.css" />
+</head>
+<body onload='load()' >
+  <div id="menu">
+    <table class="menu" align="center" width="100%"><tr>
+	<td width='33%'>управление кораблем</td>
+	<td width='33%'>база знаний</td>
+	<!--td>управление системой</td-->
+	<td>руководство по использованию системы</td>
+    </tr></table>
+  </div>
+  <div id="problem">Для начала работы введите учетные данные</div>
+
+  <div id="auth">LOGIN MODULE
+    <div id="logout">Управляющий системой:  <p style='display:inline' id="name"></p> <input type="button" value="завершить сеанс" onclick='logout()'> </div>
+    <div id="login"> Вход в систему: 
+      <table><tr>
+	  <td>
+	    <input name="username" id="username" type="text"> </td>
+	  <td rowspan="2"> <input type="button" value="Войти в систему" onclick='login()'></td>
+	</tr>
+	<tr><td>
+	    <input name="pwd" id="pwd" type="password">
+	</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div id="stars">STARS</div>
+  <div id="figure">[this is fig.1 -> !]</div>
+  <div id="status"> it's time to fly</div>
+
+  
+</body>
+</html>

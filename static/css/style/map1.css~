@@ -1,0 +1,25 @@
+/* -*- mode: css; -*-
+*/
+
+div#expanded{
+    left: -1px;
+    top:100px;
+    width:17%;
+    height:60%;
+    z-index:10;
+    padding:0px;
+    border:solid 3px;
+    position:absolute;
+    background:#ffffff;
+}
+
+#switchlist{
+    margin:0;
+    list-style:none;
+}
+
+LI.switch{ 
+    margin:0;
+    padding:0;
+    color:#ff0000;
+}

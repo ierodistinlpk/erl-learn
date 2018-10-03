@@ -1,0 +1,50 @@
+/* содержит описание стилей отображения свичей и нод с разным состоянием */
+
+ /*цвет + размер*/
+/*ok*/
+.state1{
+/*    width:
+    height:*/
+    background:#22ff22;
+}
+/*warning/down*/
+.state2{
+/*    width:
+    height:*/
+    background:#ffa500;
+}
+/*critical/ureacheable*/
+.state3{
+    background:#ff0000;
+}
+/*unknown*/
+.state4{
+    background:#483d8b;
+}
+/*other magic*/
+.state0{
+    background:#cdc9c9;
+}
+/*границы+прозрачность*/
+/*soft*/
+.hard1{
+    border-color:black;
+} 
+/*hard*/
+.hard2{
+    border-color:red;
+}
+
+/* границы*/
+.ack1{
+    opacity:1;
+    border-style:solid;
+    border-width:1px;
+}
+.ack2{
+    opacity:0.8;
+    border-style:dotted;
+    border-width:1px;
+} 
+
+/*	duartion 0..2 размер чем дольше лежит - тем крупнее?*/

@@ -1,0 +1,138 @@
+// -*- encoding:utf-8-*-
+//to onload. fill auth sector, status sector, stars, and start picture
+function load(){
+    //TODO: check session with current ssid
+     $.ajax('/login',{type: "POST",dataType:'json',data:{'user':'captain','pwd':'cap'},success:function(a,b,c){loginHandler(a,b,c)},error:function(){alert("fail");}});
+    return null;
+}
+
+// to login/logout buttons
+function login(){
+    var username = $('#username').val();
+    var pwd = $('#pwd').val();
+    $('#pwd').val('');
+    $.ajax('/login',{type: "POST",dataType:'json',data:{'user':username,'pwd':pwd},success:function(a,b,c){loginHandler(a,b,c)},error:function(){alert("fail");}});
+}
+function logout(){
+    $.ajax('/logout',{success:function(a,b,c){logoutHandler(a,b,c)},error:function(){alert("fail");}});
+}
+
+function mainview(){
+    $.ajax('/problem',{dataType:'json',success:function(a,b,c){problemsHandler(a,b,c)},error:false});
+}
+function updateStatus(){
+    $.ajax('/status',{dataType:'json',success:function(a,b,c){updateStatusHandler(a,b,c)},error:false});
+}
+function updateShip(){
+    $.ajax('/ship',{dataType:'json',success:function(a,b,c){updateShipHandler(a,b,c)},error:false});
+}
+
+    
+function loginHandler(data,textStatus,jqXHR){
+    if (data['logged_in']){
+	$('#login').css('display','none');
+	$('#logout').css('display','block');
+	$('#name').text(data['username']);
+	mainview();
+	updateStatus();
+	updateShip();
+    }
+    else
+	$('#problem').text(data['msg']);
+}
+
+function logoutHandler(data,textStatus,jqXHR){
+    $('#problem').html('Для начала работы введите учетные данные');
+	$('#logout').css('display','none');
+	$('#login').css('display','block');
+
+}
+
+function updateStatusHandler(data,textStatus,jqXHR){
+    //TODO: раскрасить
+    var Parent=document.getElementById('status');
+    while (Parent.childNodes.length>1)Parent.removeChild(Parent.childNodes[1]);
+    classes=['normal','alert','critical'];
+    states=['работает','авария','опасность!']
+    var table=document.createElement('table');
+    for (var i=0;i< data.length;i++){
+	var tr=document.createElement('tr');
+	table.appendChild(tr);
+	for (var key in data[i]){
+	    var td=document.createElement('td');
+	    if (key=='state')
+		td.innerHTML=states[data[i][key]];
+	    else
+		td.innerHTML=data[i][key];
+	    tr.appendChild(td);
+	}
+    }
+    Parent.appendChild(table);
+}
+
+function updateShipHandler(data,textStatus,jqXHR){
+    // TODO: Раскрасить
+    var Parent=document.getElementById('ship')
+    classes=['off','on'];
+    states={'switch':['выкл','вкл'],'door':['закрыто','открыто']}
+    while (Parent.childNodes.length>1)Parent.removeChild(Parent.childNodes[1]);
+    var tables={'switch':document.createElement('table'),'door':document.createElement('table')};
+    for (var i=0;i< data.length;i++){
+	var item=data[i];
+	var tr=document.createElement('tr');
+	tr['partname']=item['part_name']
+	tr.onclick=function(){confirmShip(this)}
+	tables[data[i]['part_type']].appendChild(tr);
+	for (var key in item){
+	    if (key!='part_type'){
+		var td=document.createElement('td');
+		if (key=='state')
+		    td.innerHTML=states[item['part_type']][item[key]];
+		else
+		    
+		    td.innerHTML=item[key];
+		tr.appendChild(td);
+	    }
+	}
+    }
+    Parent.appendChild(tables['door']);
+    Parent.appendChild(tables['switch']);
+}
+
+function confirmShip(Row){
+    code=prompt("Введите код доступа","");
+    if (code != null){
+	$.ajax('/ship/'+Row['partname'],{data:{'answer':code},dataType:'json',success:function(a,b,c){updateShipHandler(a,b,c)},error:false});
+    }
+}
+
+function problemsHandler(data,textStatus,jqXHR){
+// TODO: show active(clickable) list of availible problems
+    var Parent=document.getElementById('problem');
+    var table=document.createElement('table');
+    for (var i=0;i< data.length;i++){
+        var item=data[i];
+        var tr=document.createElement('tr');
+        table.appendChild(tr);
+        tr['node_name']=item['node_name']
+        tr.onclick=function(){$.ajax('/problem/'+this['node_name'], {dataType:'json',success:function(a,b,c){problemHandler(a,b,c)},error:false})}
+        for (var key in item){
+            var td=document.createElement('td');
+            if (key=='state')
+                td.innerHTML=states[item[key]];
+            else
+                td.innerHTML=item[key];
+            tr.appendChild(td);
+        }
+    }
+    Parent.appendChild(table)
+}
+
+function problemHandler(data,textStatus,jqXHR){
+// TODO: show one problem information
+    var Parent=document.getElementById('problem');
+    while (Parent.childNodes.length>1)Parent.removeChild(Parent.childNodes[1]);
+    for (var key in data){
+	Parent.innerHTML+='<br>'+key+':'+data[key]
+    }
+}

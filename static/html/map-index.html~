@@ -1,0 +1,17 @@
+
+<head>
+  <script type='text/javascript' src='/mymedia/js/jquery.js'></script>
+  <script type='text/javascript' src='/mymedia/js/jquery-ui.js'></script>
+  <script type='text/javascript' src='/mymedia/js/jquery-json.js'></script>
+  <script type='text/javascript' src='/mymedia/js/raphael-min.js'></script>
+  <script type='text/javascript' src='/mymedia/js/raphael.group.js'></script>
+  <script type='text/javascript' src='/mymedia/js/helperslib.js'></script>
+  <script type='text/javascript' src='/mymedia/js/techmap.js'></script>
+  <link rel='stylesheet' type="text/css" href='/mymedia/css/map.css'>
+  <link rel='stylesheet' type="text/css" href='/mymedia/css/main.css'>
+</head>
+<body width='160px' onload='init()'>
+  <div id='control'>
+    <p><input type='button' value='update state' onclick='updateState()'></p>
+  </div>
+</body>

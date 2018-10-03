@@ -1,0 +1,54 @@
+//TODO
+// список постраничный, но сортировка в пределах листа. придумать глобальную сортировку
+function ajaxSetup(){
+  jQuery.ajaxSetup({type:'POST',async: false,dataType:'json'})
+}
+var debug = function() {
+  // В firefox без firebug-а нет console.log
+  if(window.console && typeof console.log === "function")
+    window.console.log.apply(window.console, arguments)
+}
+function init(){
+  ajaxSetup()
+}
+
+function find(str,type){
+  $.ajax('/all',{data:{'type':type,'name':str},success:function(r,text,xhr){showTable($.parseJSON(xhr.responseText),type)},error:function(r,text,xhr){}})  
+}
+
+function showTable(resp,type){
+  if(typeof(resp)=='string'){
+    getDiv('info').innerHTML=resp
+    return null
+  }
+  var div=getDiv(type)
+  var p=div.childNodes[div.childNodes.length-2]
+  p.innerHTML=''
+  p.appendChild(createNavigation(resp['nav'],type))
+  p.appendChild(createTable(resp['data'],resp['columns'],type,null,null,true))
+}
+
+function save(params){
+  $.ajax('/save',{data:params,success:function(r,text,xhr){getDiv('info').innerHTML='saving result:'+xhr.responseText;}, error:function(r,text,err){debug(text);debug(r);} })
+}
+
+function createNavigation(data,type){
+  var panel=getDiv(type+'_nav')
+  var sep=' : '
+  panel.innerHTML=''
+  panel.className='nav'
+  var lastpage=data['count']/20//per_page
+  for (i=Math.max(parseInt(data['current'])-3,0);i<=Math.min(parseInt(data['current'])+3,lastpage);i++){
+    var link=document.createElement('a');
+    link.innerHTML=i
+    link.href=''
+    link.i=i
+    link.onclick=function(){
+      $.ajax('/all',{data:{'type':type,'name':data['req'],'page':this.i,'lim':20},success:function(r,text,xhr){showTable($.parseJSON(xhr.responseText),type)},error:function(r,text,err){debug(text);debug(r)}})
+      return false; 
+    }
+    panel.appendChild(link)
+    panel.appendChild(document.createTextNode(sep))
+  }
+  return panel
+}

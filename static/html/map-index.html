@@ -1,0 +1,25 @@
+
+<head>
+  <script type='text/javascript' src='/js/jquery.js'></script>
+  <script type='text/javascript' src='/js/jquery-ui.js'></script>
+  <script type='text/javascript' src='/js/jquery-json.js'></script>
+  <script type='text/javascript' src='/js/raphael-min.js'></script>
+  <script type='text/javascript' src='/js/raphael.group.js'></script>
+  <!--script type='text/javascript' src='/js/helperslib.js'></script-->
+  <script type='text/javascript' src='/js/persongraph.js'></script>
+  <!--link rel='stylesheet' type="text/css" href='/mymedia/css/map.css'>
+  <!--link rel='stylesheet' type="text/css" href='/mymedia/css/main.css'-->
+</head>
+<body width='160px' onload='init()'>
+  <div id='control'>
+    <!--p><input type='button' value='update state' onclick='updateState()'></p-->
+    <p>мин. связи: 
+    <select id='cogerent' name='cogerent' onchange='changeCoherency()'> 
+      <option> 1 </option>
+      <option selected="selected"> 2 </option>
+      <option> 3 </option>
+      <option> 4 </option>
+      <option> 5 </option>
+    </select>
+  </div>
+</body>

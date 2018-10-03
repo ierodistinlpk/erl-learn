@@ -1,0 +1,158 @@
+// -*- encoding:utf-8 -*-
+function init(){
+    svg=null,    trash=null
+    csrf_token=null//getCookie('csrftoken')
+    document.getElementById('id_planes').onchange=function(){jQuery.post('map/',{'map':this.value,'csrfmiddlewaretoken':csrf_token},function(data,textStatus){createMap(data)});}
+    jQuery.post('map/',{'csrfmiddlewaretoken':csrf_token},function(data,textStatus){createMap(data)});
+}
+
+//рисование устройства
+function drawPerson(user,map){
+    var unit=10
+    var width=40
+    var height=20
+    var dev=map.group(map,user['username'],user.x,user.y);
+    point.node.id=user['name']
+    var point=map.rect(0,0,width,height)
+    point.node.id=user['name']+'point'
+    var label=map.text(10,10,user['username'])
+    dev.push(point)
+    dev.push(label)
+    chasis.node.className.baseVal='user'
+    label.attr({ "font-size": 12, "font-family": "Tahoma","text-anchor":"start"});
+    label.node.className.baseVal='label'
+    dev.drag(enddrag)
+    dev.item=device
+    return dev
+}
+
+function drawConnection(name1,name2,count,svg){
+    var f1=document.getElementById(name1)
+    var f2=document.getElementById(name2)
+    var x1=parseInt(f1.getAttribute('x')),y1=parseInt(f1.getAttribute('y')),
+    x2=parseInt(f2.getAttribute('x')),y2=parseInt(f2.getAttribute('y'));
+    var str1="M"+x1+','+y1+'C'+x1+','+(y1+y2)/2+' '+(x1+x2)/2+','+(y1+y2)/2+' '+(x1+x2)/2+','+(y1+y2)/2
+    var str2="M"+(x1+x2)/2+','+(y1+y2)/2+'C'+(x1+x2)/2+','+(y1+y2)/2+' '+x2+','+(y1+y2)/2+' '+x2+','+y2
+    //  var label1=map.text(10,10,device['sysname'])
+    //  var label2=map.text(10,10,device['sysname'])
+    var colors=['#22ff22','#dddd22','#ff2222','#000']
+    var line=[svg.path(str1),svg.path(str2)]
+    /********  TODO: set line style with terminations textStatus */
+    line[0].attr({'stroke':colors[f1['num']]})
+    line[1].attr({'stroke':colors[f2['num']]})
+    line['terminations']=[f1,f2]
+    return line
+}
+
+//рисование карты
+function createMap(data,textStatus){
+    var meta={'width':600,'height':200}
+    devices=data['users']
+//    list=data['list']
+    lines=[]
+//    document.getElementById('devicelist_p').innerHTML=''
+//    document.getElementById('devicelist_p').appendChild(makelist(list,['id','sysname'],'devicelist'))
+    if (!svg)
+	svg=Raphael(160,0,meta['width'],meta['height'])
+    else
+	svg.setSize(meta['width'],meta['height'])
+    svg.clear()
+    trash=svg.rect(0,0,20,20)
+    trash.node.id='trash'
+    for (var i=0;i<devices.length;i++){
+	devices[i].x=(i*40)%600
+	devices[i].y=Math.Ceil(i/10+1)*40
+	drawPerson(devices[i],svg)
+    }
+    reDrawConnections(devices)
+}
+
+function reDrawConnections(devices){
+    for (var i=0;i<lines.length;i++){
+	lines[i][0].remove()
+	lines[i][1].remove()
+    }
+    lines.length=0;
+    for (i=0;i<devices.length;i++){
+	var ports=devices[i]['ports']
+	for (var j=0;j<ports.length;j++){ //каждому порту ищем парную железку
+	    var port1=ports[j],port2=null
+	    var pair_id=port1['pair_port']
+	    if (pair_id!=null)
+		for (var k=i;k<devices.length;k++){
+		    var index=ids(devices[k]['ports'],'id').indexOf(pair_id)
+		    if(index!=-1 ){ //вернуть железку в которой найден порт с таким id
+			port2=devices[k]['ports'][index]
+			lines.push(drawConnection(devices[i]['sysname']+'--'+port1['name'],devices[k]['sysname']+'--'+port2['name'],svg))
+			break
+		    }
+		} 
+	}
+    }
+}
+
+function enddrag(it){
+    var g=it.node.parentNode
+    var del=false
+    g.ismoved=true;
+    var nodes=Array.prototype.slice.call(g.childNodes)
+    reDrawConnections(devices)
+}
+
+function ids(array,field){
+    ret=[]
+    for (var i=0;i<array.length;i++){
+	ret.push(array[i][field])
+    }
+    return ret
+}
+
+
+function add_plane(){
+    var form=div('plane_form','form')
+    var name=input('name','text')
+    var x=input('x','text')
+    var y=input('y','text')
+    form.appendChild(document.createTextNode('Name:'))
+    form.appendChild(name)
+    form.appendChild(document.createElement('br'))
+    form.appendChild(document.createTextNode('width:'))
+    form.appendChild(x)
+    form.appendChild(document.createElement('br'))
+    form.appendChild(document.createTextNode('height:'))
+    form.appendChild(y)
+    var ok=input('ok','button','ok')
+    var cancel=input('cancel','button','cancel')
+    form.appendChild(ok)
+    form.appendChild(cancel)
+    $('#control').append(form)
+    ok.onclick=function(){
+	data={'name':name.value,'width':x.value,'height':y.value,'csrfmiddlewaretoken':csrf_token}
+	jQuery.post('newmap/',data,function(dat,Status){
+	    //можно обнавлять старницу?
+	    var el=document.createElement('option')
+	    el.value=dat
+	    el.innerHTML=data['name']
+	    el.selected="selected"
+	    $('#id_planes').append(el)
+	    jQuery.post('map/',{'map':dat,'csrfmiddlewaretoken':csrf_token},function(data,textStatus){createMap(data)});
+	})
+    }
+}
+
+function updateState(){
+    jQuery.post('state/',{'map':document.getElementById('id_planes').value,'csrfmiddlewaretoken':csrf_token},function(data,textStatus){processState(data)});
+}
+
+function processState(data){
+    //draw connections brightly
+    var colors=['green','yellow','red']
+    for (var i=0;i<data.length;i++){
+	var item=data[i]
+	port=document.getElementById(item[0]+'--'+item[1])
+	port.setAttribute('style','fill:'+colors[item[2]])
+	port['textState']=item[3]
+	port['numState']=item[2]
+    }
+    reDrawConnections(devices)
+}

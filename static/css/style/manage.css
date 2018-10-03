@@ -1,0 +1,32 @@
+a:visited {   
+    color:black;}
+a:hover{
+    font-weight:bold;}
+#device{
+    position:absolute;
+    display:block;
+    left:1%;
+    width:48%;
+}
+
+#node{
+    position:absolute;
+    display:block;
+    left:50%;
+    width:48%;
+}
+
+P{
+
+    height:20em;
+    overflow:auto;
+}
+
+#info{
+    position:absolute;
+    height:18%;
+    top:80%;
+    width:90%;
+    left:0px;
+    border: dotted 1px red;
+}

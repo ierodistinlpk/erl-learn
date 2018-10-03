@@ -1,0 +1,23 @@
+<!-- -*- encoding:utf-8-*--->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src= "/js/jquery.js"></script>
+  <script type="text/javascript" src= "/js/building.js"></script>
+  <link rel="stylesheet" href="/css/building.css" />
+</head>
+<body onload='load()' >
+
+  <div id="input">
+    <p>input lines for cutting with tab or ';' between size and count</p>
+    <input type='multiline' id='to_saw'>
+    <input type='button' id='cut' onclick='cut()' value='cut tree'>
+
+  </div>
+  <div id="output">
+
+  </div>
+
+</body>
+</html>

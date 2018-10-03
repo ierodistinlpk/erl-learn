@@ -1,0 +1,85 @@
+div{
+border:1px inset # 96EC34;
+width:48%;
+position:absolute;
+padding:2px;
+background-color:#9EEAFF;
+color:#111100;
+opacity:0.85;
+overflow:auto;
+}
+
+#menu{
+top:0;
+width:97%;
+padding:2px;
+opacity:0.9;
+}
+
+#problem{
+top:35%;
+height:48%;
+}
+#auth{
+top:85%;
+height:10%;
+opacity:0.9;
+}
+
+#pic{
+/*left:50%;*/
+height:28%;
+top:5%;
+}
+#ship{
+left:50%;
+top:35%;
+height:48%
+}
+#status{
+left:50%;
+top:5%;
+height:28%;
+}
+
+#logout{
+    width:98%;
+
+    display:none;
+/*    display:block;*/
+}
+#login{
+    width:98%;
+/*    display:none;*/
+    display:block;
+}
+
+table{
+display:inline-table;
+/*background-color:#a0cFFF;*/
+background-color:#9EEAFF;
+color:#111100;
+opacity:0.95;
+}
+/*table.menu{display:block;}*/
+td{
+background-color:#3EEBFF;
+border: outset 2px #41F6FF;
+text-align:center;
+}
+
+p{
+padding:0px;
+margin:0px;
+text-align:center;
+font-weight: bold;
+/*font-*/
+background-color:#3ED6FF;
+/*background-color:#96EC34;*/
+border:1px inset #ECE634;
+/*color: #ECE634; yellow*/
+color:#3A1D08; /*dark*/
+}
+input{
+height:100%;
+}

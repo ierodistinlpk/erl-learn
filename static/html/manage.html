@@ -1,0 +1,29 @@
+<!-- -*- encoding: utf-8 -*- -->
+<html>
+  <head>
+    <title>manage content</title>
+
+    <script type="text/javascript" src="/js/jquery.js"> </script>
+    <script src="/js/grid/editablegrid-1.0.11.js"></script>
+    <link rel="stylesheet" href="../editablegrid-1.0.11.css" type="text/css" media="screen">
+    <script type="text/javascript" src="/js/tablelib.js"></script>
+    <script type="text/javascript" src="/js/manage.js"></script>
+    <link rel="stylesheet" href="/style/manage.css" type="text/css" />
+  </head>
+  <body onload='init()'>
+    <a href='/map.html'> перейти на карту </a>
+    <div id='device'>
+      устройства
+      <br>
+      <input type='text' id='find_switch' name='str' value=''>
+      <input type='button' name='ss' value='search' onclick="find($('#find_switch').val(),'device')">
+      <input type='button' name='as' value='all' onclick="find(null,'device')">
+    </div>
+    <div id='node'>
+      ящики <br>
+      <input type='text' id='find_node' name='str' value=''>
+      <input type='button' name='sn' value='search' onclick="find($('#find_node').val(),'node')">
+      <input type='button' name='an' value='all'  onclick="find(null,'node')">
+     </div>
+    <div id='info'></div>
+</html>

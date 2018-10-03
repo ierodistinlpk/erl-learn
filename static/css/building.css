@@ -1,0 +1,43 @@
+div{
+border:1px;
+width:48%;
+position:absolute;
+padding:2px;
+background-color:#9EEAFF;
+color:#111100;
+opacity:0.85;
+overflow:auto;
+}
+
+#to_saw{
+background-color:#FFEAeF;
+heigjt:30em;
+/*rows:30;*/
+overflow-x: hidden;
+}
+
+#input{
+top:0;
+height:100%;
+}
+#output{
+top:0%;
+height:100%;
+left:51%;
+}
+
+padding:0px;
+margin:0px;
+text-align:center;
+font-weight: bold;
+/*font-*/
+background-color:#3ED6FF;
+/*background-color:#96EC34;*/
+border:1px inset #ECE634;
+/*color: #ECE634; yellow*/
+color:#3A1D08; /*dark*/
+}
+
+input{
+height:100%;
+}

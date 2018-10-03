@@ -1,0 +1,40 @@
+<!-- -*- encoding:utf-8-*--->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script type="text/javascript" src= "/js/jquery.js"></script>
+  <script type="text/javascript" src= "/js/expences.js"></script>
+  <link rel="stylesheet" href="/css/expences.css" />
+</head>
+<body onload='load()' >
+
+  <div id="menu">
+		<input type='button' onclick='show_form("expence")' value='single record'></input>
+		<input type='button' onclick='show_form("tableview")' value='table view'></input>
+	</div>
+  <div id="expence">
+		<form id='singleform'>
+		<input type='reset' value='clear form'>
+		<table>
+			<tr><td>category</td><td><select id='category' name='category'></select></td></tr>
+			<tr><td>sum</td><td><input type='text' min=0 name='summ'>                       </td></tr>
+			<tr><td>descr</td><td><input type='text' name='description'>              </td></tr>
+			<tr><td>date</td><td><input type='date' name='exptime'>                   </td></tr>
+			<tr><td>currency</td><td><select id='currency' name='currency'></select></td></tr>
+			<tr><td>location</td><td><select id='location' name='location'></select></td></tr>
+		
+			<tr><td><input type='button' onclick='save("expence")' value='save'></td>
+			<td><input type='checkbox' name='is_approx'> approx value
+			<br><input type='radio' name='is_expence' value='expense' checked> expense
+			<br><input type='radio' name='is_expence' value='income'> income</td></tr>
+		</table>
+		<input type='hidden' name='id'>
+		</form>
+  </div>
+	<div id="tableview">
+
+  </div>
+
+</body>
+</html>

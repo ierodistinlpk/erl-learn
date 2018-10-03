@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>MAP</title>
+
+    <script type="text/javascript" src="/lib/scriptaculous/lib/prototype.js"> </script>
+    <script type="text/javascript" src="/lib/scriptaculous/src/scriptaculous.js" ></script>
+    <script type="text/javascript" src="/lib/scriptaculous/src/dragdrop.js" ></script>
+    <script type="text/javascript" src="/js/tablekit.js"></script>
+    <!--script type="text/javascript" src="/js/gs_sortable.js"></script-->
+    <script type="text/javascript" src="/js/map2.js"></script>
+
+    <!-- <script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script> -->
+    <!--script type="text/javascript">
+      var TSort_Data = new Array('switchlist','s','s');
+      tsRegister(); 
+    </script-->
+    <link rel="stylesheet" id='map' href="/style/map.css" type="text/css" />
+    <link rel="stylesheet" id='map' href="/style/states.css" type="text/css" />
+  </head>
+
+  <body id='body'>
+  
+    <div id=maindiv>     
+      <div id="zoom" class="zoom">
+	<span id=zoomout class=zoomlink>-</span>
+	<span id=zoomcount>1</span>/<span id=zoomtotal>/8</span>
+	<span id=zoomin  class=zoomlink>+</span>
+      </div>
+      <div id='switchstab'>
+	<a href='/manage.html'> список объектов </a>
+	<table id=control>
+	  <tr><td>
+	      <input type="button" id='edit_sw' name='edit_sw' value='edit' />
+	    </td><td>
+	      <input type="button" id='save_sw' name='save_sw' value='save' disabled='true' />
+	    </td> <td>
+	      <input type="button" id='refresh_state' name='refresh_state' value='refresh state'/>
+	  </td></tr>
+	</table>
+	<hr>
+	<table id='switchlist' width='100%'>
+	  <thead><tr> <td width='60%'>name</td><td>адрес</td></tr></thead>
+	  <tbody id='tbody'>	    
+	  </tbody>
+	</table>
+      </div>
+      
+      <div id='nodestab'>
+	<a href='/manage.html'> список объектов </a>
+	<table id='nodecontrol'>
+	  <tr><td>
+	      <input type="button" id='filter_n' name='filter' value='filter' />
+	  </td><td>
+	      <input type="button" id='edit_map' name='edit_map' value='edit map' />
+	    </td><td>
+	      <input type="button" id='save_map' name='save_map' value='save map' disabled='true' />
+	  </td></tr>
+	</table>
+	<hr>
+	<table id='nodelist'>
+	  <thead><tr> <td>name</td></tr></thead>
+	  <tbody id='nbody'>	    
+	  </tbody>
+	</table>
+      </div>
+    </div>
+    <div id='info'>
+      <p id='symb'>
+	<span class='state1 hard1 ack1'>ok</span>
+	<span class='state2 hard2 ack1'>down</span>
+	<span class='state3 hard2 ack1'>unrecheable</span>
+	<span class='state2 hard1 ack1'>soft</span>
+	<span class='state2 hard2 ack2'>ack</span>
+	<span class='state0 hard1 ack1'>unknown/ack</span>
+      </p>
+      <p><span id='coor'></span>
+      <span id='filt'></span></p>
+    </div>     
+    <div id='buff'></div>
+  </body>
+</html>
+
+<!--
+Local Variables:
+  coding: utf-8-dos
+End:
+-->

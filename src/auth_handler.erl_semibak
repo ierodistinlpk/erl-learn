@@ -1,0 +1,89 @@
+%% Feel free to use, reuse and abuse the code in this file.
+%% TODO
+% return ID+random_number OR salted(ID) as parameter to session
+% POST authorization
+%% @doc Handler with basic HTTP authorization.
+-module(auth_handler).
+-behaviour(cowboy_http_handler).
+-export([init/3]).
+-export([handle/2]).
+-export([terminate/3]).
+
+init(_Transport, Req, []) ->
+	{ok, Req, undefined_state}.
+
+handle(Req, State) ->
+    {Method_name,_ }= cowboy_req:method(Req),
+    {Succes,Req1,_}=process_auth(Method_name,Req,State),
+    case Succes of 
+	{true,Id}->
+	    {true,Req1,Id};
+	_->
+	    {false,Req1,State}
+    end.
+
+
+process_auth(<<"GET">>,Req,State)->
+    io:write(<<"QQQ">>),
+    Parse_res = cowboy_req:parse_header(<<"authorization">>,Req),
+    case Parse_res of 
+	{ok, Auth, Req1} ->
+	    case Auth of
+		{<<"basic">>, {Username,Pass}} ->
+		    Status=check_in_db(Username,Pass),
+		    {Status,Req1,State};
+		_ ->
+		    {{false,<<"no need  auth">>},Req1, State}
+	    end;
+	_ -> 
+	    {{true,ok},Req, State}
+    end;
+
+process_auth(<<"POST">>,Req,State)->
+    {ok,Body,Req2} = cowboy_req:body(Req),
+    Tmp=binary:split(Body,<<"&">>,[global]),
+    Parse_res=lists:map(fun(X)->[Key,Val]=binary:split(X,<<"=">>), {Key,Val} end,Tmp),
+%   parse username & (salted ?)password_String
+    [{<<"user">>,Username},{<<"pwd">>,Password}]=Parse_res,
+    Check=check_in_db(Username,Password),
+    io:write(Check),
+    case Check of 
+	{true,Id}->
+	    {{true,cowboy_session:set(Id)},Req2,State};
+	{false,Reason} ->
+	    {{false,Reason},Req2,State};
+	{_,_} ->
+	    {{false,<<"HUI EGO ZNAET">>},Req2,State}
+    end;
+
+process_auth(_,Req,State)->
+    io:write(<<"ANYANO??\n">>),
+    {false,Req,State}.
+	
+check_in_db(User,Pass)->
+    Host="localhost",
+    Opts=[{database,"spaceship"}],
+    Exists_query="select username from users where username ILIKE $1",
+    Auth_query="select users.id as uid from users join secrets on secrets.id=users.id where username= $1 and passwd = $2",
+    {ok, C} = pgsql:connect(Host, ["spaceship"], ["spaceship"], Opts),
+    {ok, _, Usernames}=pgsql:equery(C,Exists_query,[User]),
+    case Usernames of 
+	[]->
+	    {false,nouser};
+	_->
+	    [Username]=Usernames,
+	    io:write(Username),
+	    {ok, Columns, Authenticated} = pgsql:equery(C,Auth_query,[Username,Pass]),
+	    io:put_chars(Authenticated),
+	    case Authenticated of 
+		[{Id}|_]->
+		    {true,Id};
+		_ ->
+		    {false,pwd}
+	    end
+    end.
+
+
+
+terminate(_Reason, _Req, _State)->ok.
+

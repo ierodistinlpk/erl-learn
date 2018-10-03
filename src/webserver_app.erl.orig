@@ -1,0 +1,36 @@
+-module(webserver_app).
+
+-behaviour(application).
+
+%% Application callbacks
+-export([start/2, stop/1, update_routes/0]).
+
+%% ===================================================================
+%% Application callbacks
+%% ===================================================================
+
+dispatch_rules()->
+    cowboy_router:compile([
+			   {'_', [
+						%           {"/", index_handler, []},
+				  {"/", cowboy_static, {priv_file, webserver,"/html/map-index.html"}},
+				  {"/statistics", statistics_handler,[]},
+				  {"/getremote",getremote_handler, []},
+				  {"/js/[...]", cowboy_static, {priv_dir,webserver, "/js"}},
+				  {"/persongraph",persongraph_handler,[] },
+				  {'_', notfound_handler, []}
+				 ]}
+			  ]).
+
+start(_Type, _Args) ->
+    Dispatch =dispatch_rules(),
+    Port = 8008,
+    {ok, _} = cowboy:start_http(http_listener, 100,[{port, Port}],[{env, [{dispatch, Dispatch}]}]),
+    webserver_sup:start_link().
+
+stop(_State) ->
+    ok.
+
+
+update_routes() ->
+    cowboy:set_env(http_listener, dispatch,dispatch_rules()).
